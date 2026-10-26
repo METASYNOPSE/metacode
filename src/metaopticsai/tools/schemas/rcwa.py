@@ -23,8 +23,8 @@ class RCWASweepInput(BaseModel):
         description="Number of points in the diameter sweep.")
     xy_harmonics: int = Field(3, ge=1, le=11,
         description="RCWA harmonics per axis. 3 is fast; 5–7 for high-NA designs.")
-    backend: Literal["auto", "metabox", "analytical", "s4"] = Field("auto",
-        description="Simulation backend. 'auto' picks the best available.")
+    backend: Literal["auto", "metabox"] = Field("auto",
+        description="Simulation backend. Only 'metabox' (RCWA) is supported.")
 
 
 class RCWASweepOutput(BaseModel):

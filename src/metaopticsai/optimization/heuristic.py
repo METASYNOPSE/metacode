@@ -1,7 +1,4 @@
 """Heuristic optimizer — uses the analytical backend to drive a coarse search.
-
-This is the same logic that was inline in the old `optimize_metalens` MCP
-tool, lifted into a proper Optimizer subclass.
 """
 from __future__ import annotations
 

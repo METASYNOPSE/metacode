@@ -23,7 +23,7 @@ class PathsConfig:
         self.output_dir: Path = _ROOT / "outputs"
         self.papers_dir: Path = _ROOT / "papers"
         self.material_dir: Path = (
-            _ROOT / "src" / "metaopticsai" / "vendor" / "metabox3" / "material_data"
+            _ROOT / "src" / "metaopticsai" / "physics" / "rcwa_engine" / "material_data"
         )
         self.output_dir.mkdir(parents=True, exist_ok=True)
 

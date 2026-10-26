@@ -48,8 +48,19 @@ def build_tool_registry(
         OptimizeMetalensTool, TrainMetamodelTool,
         GetJobTool, ListArtifactsTool,
     )
+    from metaopticsai.tools.design_tools import (
+        ValidateDesignTool, ListTemplatesTool, GetTemplateTool,
+        GetWorkflowGuideTool, GetOptimizationTipsTool,
+    )
 
     reg = ToolRegistry()
+
+    # ── 0. Design workflow helpers ────────────────────────────────────────
+    reg.register(ListTemplatesTool())
+    reg.register(GetTemplateTool())
+    reg.register(GetWorkflowGuideTool())
+    reg.register(ValidateDesignTool())
+    reg.register(GetOptimizationTipsTool())
 
     # ── 1. RCWA & FDTD library ────────────────────────────────────────────
     reg.register(GetFDTDLibraryTool())

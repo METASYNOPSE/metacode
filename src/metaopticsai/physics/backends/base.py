@@ -76,16 +76,14 @@ class BackendRegistry:
         self._backends[backend.name] = backend
 
     def get(self, name: str = "auto") -> SimulationBackend:
-        """Return a backend by name. `"auto"` picks the first available
-        from (metabox, s4, analytical)."""
+        """Return a backend by name. `"auto"` selects metabox."""
         if name == "auto":
-            for candidate in ("metabox", "s4", "analytical"):
-                b = self._backends.get(candidate)
-                if b is not None and b.is_available():
-                    return b
+            b = self._backends.get("metabox")
+            if b is not None and b.is_available():
+                return b
             raise RuntimeError(
-                "No simulation backend available. Install TensorFlow for "
-                "metabox3 or ensure the analytical backend is registered."
+                "MetaBox RCWA backend unavailable. "
+                "Install TensorFlow with `pip install .[tf]`."
             )
         b = self._backends.get(name)
         if b is None:

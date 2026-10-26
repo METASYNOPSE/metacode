@@ -95,9 +95,14 @@ class GDSEngine:
         ph_arr = np.array(phases, dtype=float)
         dim_arr = np.array(dimensions, dtype=float)
         sort_idx = np.argsort(ph_arr)
+        ph_sorted = ph_arr[sort_idx]
+        dim_sorted = dim_arr[sort_idx]
+        # Deduplicate — newer scipy raises on repeated x values in cubic interp.
+        _, unique_idx = np.unique(ph_sorted, return_index=True)
         f_interp = interp1d(
-            ph_arr[sort_idx], dim_arr[sort_idx],
-            kind="cubic", fill_value="extrapolate",
+            ph_sorted[unique_idx], dim_sorted[unique_idx],
+            kind="linear" if len(unique_idx) < 4 else "cubic",
+            fill_value="extrapolate",
         )
         ph_min, ph_max = float(ph_arr.min()), float(ph_arr.max())
 

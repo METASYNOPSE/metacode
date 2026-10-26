@@ -1,7 +1,6 @@
-"""Material refractive-index lookup. Thin facade over metabox3's CSV tables.
+"""Material refractive-index lookup. Thin facade over the rcwa_engine CSV tables.
 
-Per the dependency rules, this is the *only* file outside `backends/metabox.py`
-that may import from `vendor.metabox3`. The import is lazy.
+Imports from `physics.rcwa_engine` are lazy so the module loads without TF.
 """
 from __future__ import annotations
 
@@ -25,7 +24,7 @@ def get_material_index(name: str, wavelength_nm: float) -> MaterialIndex:
     Raises ValueError if `wavelength_nm` is outside the CSV's tabulated range.
     """
     # Lazy import — keeps cold-start fast and lets us swap implementations.
-    from metaopticsai.vendor.metabox3.rcwa import Material  # type: ignore
+    from metaopticsai.physics.rcwa_engine.rcwa import Material  # type: ignore
 
     mat = Material(name, custom_csv_dir=str(settings.paths.material_dir))
     wl_m = wavelength_nm * 1e-9

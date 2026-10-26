@@ -26,8 +26,8 @@ class OptimizeMetalensTool(BaseTool[OptimizeInput, OptimizeOutput]):
     name = "optimize_metalens"
     description = (
         "Iteratively tune a metalens design to reach the target Strehl ratio. "
-        "method='heuristic' uses the analytical estimator (fast); "
-        "'gradient' and 'surrogate' run heavier TF-backed paths."
+        "method='heuristic' is fast; 'gradient' runs the TF-backed path "
+        "via metabox3 RCWA."
     )
     Input = OptimizeInput
     Output = OptimizeOutput
@@ -157,7 +157,7 @@ def _train_metamodel_worker(
 
     Imports metabox3 lazily so a bare submit doesn't hard-fail at import time.
     """
-    from metaopticsai.vendor.metabox3 import rcwa, utils, modeling
+    from metaopticsai.physics.rcwa_engine import rcwa, utils, modeling
     import numpy as np
 
     _manager.update_status(_job_id, "sampling")

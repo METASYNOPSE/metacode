@@ -1,8 +1,7 @@
-"""MetaboxBackend — the *only* place in the entire project that imports metabox3.
+"""MetaboxBackend — the only EM simulation backend in this project.
 
-All `vendor.metabox3` imports are lazy, gated behind `is_available()`. This
-keeps notebook startup fast and lets analytical-only deployments skip the TF
-dependency entirely.
+All imports from `physics.rcwa_engine` are lazy, gated behind `is_available()`.
+This keeps cold import fast and lets the package load without TensorFlow.
 """
 from __future__ import annotations
 
@@ -42,7 +41,7 @@ class MetaboxBackend(SimulationBackend):
         if self._available is None:
             try:
                 import tensorflow as tf  # noqa: F401
-                from metaopticsai.vendor import metabox3  # noqa: F401
+                from metaopticsai.physics import rcwa_engine  # noqa: F401
                 self._available = True
             except Exception as e:  # noqa: BLE001
                 log.info("MetaboxBackend unavailable: %s", e)
@@ -53,7 +52,7 @@ class MetaboxBackend(SimulationBackend):
 
     def simulate_unit_cell(self, params, incidence):
         self._require()
-        from metaopticsai.vendor.metabox3 import rcwa, utils
+        from metaopticsai.physics.rcwa_engine import rcwa, utils
         import tensorflow as tf
 
         proto = self._build_protocell(params)
@@ -82,7 +81,7 @@ class MetaboxBackend(SimulationBackend):
 
     def sweep_unit_cells(self, params, incidence, sweep_param, sweep_values):
         self._require()
-        from metaopticsai.vendor.metabox3 import rcwa, utils
+        from metaopticsai.physics.rcwa_engine import rcwa, utils
         import tensorflow as tf
 
         if sweep_param != "diameter":
@@ -132,7 +131,7 @@ class MetaboxBackend(SimulationBackend):
         refractive_index=1.0,
     ):
         self._require()
-        from metaopticsai.vendor.metabox3 import propagation
+        from metaopticsai.physics.rcwa_engine import propagation
         import tensorflow as tf
 
         n = phase_mask.shape[0]
@@ -176,7 +175,7 @@ class MetaboxBackend(SimulationBackend):
         min_diameter_nm: float | None = None,
         max_diameter_nm: float | None = None,
     ) -> Any:
-        from metaopticsai.vendor.metabox3 import rcwa, utils
+        from metaopticsai.physics.rcwa_engine import rcwa, utils
 
         n_index = _DEFAULT_N.get(params.pillar_material)
         if n_index is None:
@@ -203,7 +202,7 @@ class MetaboxBackend(SimulationBackend):
         return rcwa.ProtoUnitCell(uc)
 
     def _build_simconfig(self, params: MetalensDesignParams, n_samples: int):
-        from metaopticsai.vendor.metabox3 import rcwa
+        from metaopticsai.physics.rcwa_engine import rcwa
         return rcwa.SimConfig(
             xy_harmonics=params.xy_harmonics,
             resolution=settings.rcwa.resolution,

@@ -1,0 +1,102 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "metaopticsai"
+version = "0.2.0"
+description = "AI-assisted meta-optics design platform with RCWA simulation"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [
+    { name = "Dishant Gupta", email = "dishantgupta83600@gmail.com" },
+]
+keywords = ["metalens", "metasurface", "RCWA", "nanophotonics", "AI"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
+
+# ── Core scientific dependencies (no LLM required) ──────────────────────────
+dependencies = [
+    "numpy>=1.26,<3",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
+    "Pillow>=10",
+    "pydantic>=2.5,<3",
+    "pydantic-settings>=2.1",
+    "openpyxl>=3.1",
+    "loguru>=0.7",
+]
+
+[project.optional-dependencies]
+# RCWA via metabox3 (TensorFlow backend)
+tf = [
+    "tensorflow>=2.15,<2.21",
+    "keras>=3",
+]
+
+# GDS layout generation
+gds = [
+    "gdsfactory>=8",
+]
+
+# Groq LLM orchestration
+llm = [
+    "groq>=0.9",
+    "python-dotenv>=1.0",
+]
+
+# Optimization extras
+optimize = [
+    "scikit-learn>=1.3",
+    "optax>=0.1",
+]
+
+# Full install (everything except dev)
+all = [
+    "metaopticsai[tf,gds,llm,optimize]",
+]
+
+# Development and testing
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+metaopticsai-agent = "metaopticsai.orchestration.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"metaopticsai.physics.rcwa_engine" = ["material_data/*.csv"]
+
+# ── Ruff (linting) ───────────────────────────────────────────────────────────
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.per-file-ignores]
+"src/metaopticsai/physics/rcwa_engine/**" = ["ALL"]
+
+# ── Pytest ───────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+# ── MyPy ─────────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+exclude = ["src/metaopticsai/physics/rcwa_engine/"]

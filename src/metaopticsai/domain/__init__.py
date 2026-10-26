@@ -8,6 +8,7 @@ from metaopticsai.domain.results import (
 )
 from metaopticsai.domain.materials import MaterialIndex
 from metaopticsai.domain.state import DesignState
+from metaopticsai.domain.templates import list_templates, get_template, TEMPLATES
 
 
 __all__ = [
@@ -17,4 +18,5 @@ __all__ = [
     "UnitCellResult", "RCWASweepResult", "FieldResult", "PSFResult", "FOMResult",
     "MaterialIndex",
     "DesignState",
+    "TEMPLATES", "list_templates", "get_template",
 ]
